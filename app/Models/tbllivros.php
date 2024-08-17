@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class tbllivros extends Model
 {
     use HasFactory;
-
+    protected $primaryKey = 'codigo';
+    
     protected $fillable = [
         'nomeLivro',
         'generoLivro',

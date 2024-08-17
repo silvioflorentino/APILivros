@@ -66,14 +66,46 @@ class TbllivrosController extends Controller
 
     //Alterar registros
     //Crud -> update(alterar)
-    public function update(){
+    public function update(Request $request,string $id){
+
+        $regBook = $request->All();
+
+        $regVerifq = Validator::make($regBook,[
+            'nomeLivro'=>'required',
+            'generoLivro'=>'required',
+            'anoLivro'=>'required'
+        ]);
+
+        if($regVerifq->fails()){
+            return 'Registros não atualizados: '.Response()->json([],Response::HTTP_NO_CONTENT);
+
+        }
+        $regBookBanco = tbllivros::Find($id);
+        $regBookBanco->nomeLivro = $regBook['nomeLivro'];
+        $regBookBanco->generoLivro = $regBook['generoLivro'];
+        $regBookBanco->anoLivro = $regBook['anoLivro'];
+
+        $retorno = $regBookBanco->save();
+
+        if($retorno){
+            return "Livro atualizado com sucesso.".Response()->json([],Response::HTTP_NO_CONTENT);
+        }else{
+            return "Atenção... Erro: Livro não atualizado".Response()->json([],Response::HTTP_NO_CONTENT);
+        }
 
     }
 
     //Deletar os registros
     //Crud -> delete(apagar)
-    public function destroy(){
+    public function destroy(string $id){
 
+    $regBook = tbllivros::Find($id);
+
+    if($regBook->delete()){   
+    return "O livro foi deletado com sucesso".response()->json([],Response::HTTP_NO_CONTENT);
+    }
+
+    return "Algo deu errado: Livro não deletado".response()->json([],Response::HTTP_NO_CONTENT);
     }
 
     //Crud
